@@ -15,13 +15,18 @@
 # limitations under the License.
 #
 
-include_recipe 'chef_handler::default'
+# include_recipe 'chef_handler::default'
 
 chef_gem 'sentry-raven' do
   action :upgrade
   version node['sentry']['gem_version']
   compile_time true
 end
+
+directory node['chef_handler']['handler_path'] do
+  action :nothing
+  recursive true
+end.run_action(:create)
 
 cookbook_file File.join(node['chef_handler']['handler_path'], 'sentry.rb') do
   action :nothing
